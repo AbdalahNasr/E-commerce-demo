@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import styles from './Register.module.css';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import axios from 'axios'
 import { Puff } from 'react-loader-spinner'
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
+
 export default function Register() {
   let navigate = useNavigate();
   const [error, seterror] = useState(null)
   const [isLoading, setisLoading] = useState(false);
+
   async function registerSubmit(values) {
-    console.log(values);
     setisLoading(true);
     try {
       let { data } = await axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signup`, values);
-      console.log(data);
       if (data.message === 'success') {
         setisLoading(false);
         navigate('/login');
@@ -25,8 +24,7 @@ export default function Register() {
     }
   }
 
-
-  let phoneRegExp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+  let phoneRegExp = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/
   let validationSchema = Yup.object({
     name: Yup.string().min(3, 'name min length is 3 characters').max(10, 'name max length is 10').required('name is required'),
     email: Yup.string().email('email is invalid').required('email is required'),
@@ -46,12 +44,11 @@ export default function Register() {
     validationSchema,
     onSubmit: registerSubmit
   })
+
   return <>
     <div className="w-75 mx-auto py-4">
-
       {error !== null ? <div className="alert alert-danger">{error}</div> : ''}
       <h2>Register Now</h2>
-
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="name">Name:</label>
         <input className="form-control mb-2" value={formik.values.name} onBlur={formik.handleBlur} onChange={formik.handleChange} name='name' type="text" id='name' />
@@ -61,11 +58,10 @@ export default function Register() {
         <input className="form-control mb-2" value={formik.values.email} onBlur={formik.handleBlur} onChange={formik.handleChange} name='email' type="email" id='email' />
         {formik.errors.email && formik.touched.email ? <div className=' alert alert-danger p-2 mt-2'>{formik.errors.email}</div> : ''}
 
-
         <label htmlFor="phone">phone:</label>
         <input className="form-control mb-2" value={formik.values.phone} onBlur={formik.handleBlur} onChange={formik.handleChange} name='phone' type="tel" id='phone' />
         {formik.errors.phone && formik.touched.phone ? <div className=' alert alert-danger p-2 mt-2'>{formik.errors.phone}</div> : ''}
-        {/* {Formik.errors.phone&& formik.touched.phone.} */}
+
         <label htmlFor="password">password:</label>
         <input className="form-control mb-2" value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} name='password' type="password" id='password' />
         {formik.errors.password && formik.touched.password ? <div className=' alert alert-danger p-2 mt-2'>{formik.errors.password}</div> : ''}
@@ -89,6 +85,3 @@ export default function Register() {
     </div>
   </>
 }
-
-
-

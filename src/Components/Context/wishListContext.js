@@ -53,6 +53,7 @@ export default function WishListContextProvider(props) {
     if (localStorage.getItem('userToken')) {
       getWishList()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <wishlistContext.Provider value={{ wishlistId, addToWishList, getLoggedUserWishList, removeWishListItem, updateProductQuantity }}>

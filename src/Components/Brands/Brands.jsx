@@ -1,21 +1,16 @@
 import React, { useEffect } from 'react';
-import styles from './Brands.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../../Redux/categoriesSlice.js';
 import { BallTriangle } from 'react-loader-spinner';
 
-
 export default function Brands() {
 
-
-
-  let { loading, isError, categories } = useSelector((state) => state.categories)
-  //  console.log({isError});
+  let { loading, categories } = useSelector((state) => state.categories)
   let dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCategories())
-  }, [])
+  }, [dispatch])
 
   return <>
     {loading ? <div className="loading">
@@ -29,14 +24,12 @@ export default function Brands() {
         wrapperClass=""
         visible={true}
       />
-
     </div>
       : <div className="row">
         {categories.map((brand) => <div key={brand._id} className="col-md-2">
           <div className="brand">
-            <img src={brand.image} className='w-100' alt="" />
+            <img src={brand.image} className='w-100' alt={brand.name} />
             <h4 className="h6 my-2">{brand.name}</h4>
-
           </div>
         </div>
         )}

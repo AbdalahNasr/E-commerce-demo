@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { wishlistContext } from '../Context/wishListContext.js';
 import { BallTriangle } from 'react-loader-spinner';
-import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 export default function WishList() {
@@ -13,7 +12,7 @@ export default function WishList() {
     let response = await removeWishListItem(id)
     if (response?.data?.status === 'success') {
       toast.success('Product removed from wishlist');
-      getWishList(); // refresh list
+      getWishList();
     } else {
       toast.error('Failed to remove product');
     }
@@ -23,12 +22,12 @@ export default function WishList() {
     let response = await getLoggedUserWishList()
     if (response?.data) {
       setWishListItems(response.data);
-      console.log(response.data)
     }
   }
 
   useEffect(() => {
     getWishList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <>

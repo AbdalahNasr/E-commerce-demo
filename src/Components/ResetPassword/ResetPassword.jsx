@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import style from './ResetPassword.module.css';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -11,14 +10,12 @@ export default function ResetPassword() {
   async function ResetPasswordNow(values) {
     try {
       const { data } = await axios.put(`https://ecommerce.routemisr.com/api/v1/auth/resetPassword`, values);
-      console.log(data);
       if (data.token) {
         localStorage.setItem('userToken', data.token);
         navigate('/Login');
       }
     } catch (err) {
       setError(err?.response?.data?.message || 'Failed to reset password. Please try again.');
-      console.error(err);
     }
   }
 

@@ -62,6 +62,7 @@ export default function CartContextProvider(props) {
     if (localStorage.getItem('userToken')) {
       getCart()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return <CartContext.Provider value={{ cartId, numOfCartItems, addToCart, onlinePayment, getLoggedUserCart, removeCartItem, updateProductQuantity }}>

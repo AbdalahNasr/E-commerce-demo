@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styles from './Cart.module.css';
 import { CartContext } from '../Context/CartContext.js';
 import { BallTriangle } from 'react-loader-spinner';
-import { Link  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
   let { getLoggedUserCart, removeCartItem, updateProductQuantity } = useContext(CartContext);
@@ -18,14 +17,15 @@ export default function Cart() {
     setCartDetails(data)
   }
 
-  async function getCart() {
-    let { data } = await getLoggedUserCart()
-    setCartDetails(data);
-    console.log(data)
-  }
   useEffect(() => {
+    async function getCart() {
+      let { data } = await getLoggedUserCart()
+      setCartDetails(data);
+    }
     getCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   return <>
     {cartDetails ? <div className="w-75 mx-auto my-2 p-3 bg-main-light">
       <h3>Shopping Cart</h3>
@@ -33,7 +33,7 @@ export default function Cart() {
       <h4 className="h6 text-main fw-bolder mb-4">Total Cart Price: {cartDetails.data.totalCartPrice} EGP </h4>
       {cartDetails.data.products.map((product => <div key={product.product.id} className="row border-bottom py-2 px-2 ">
         <div className="col-md-1">
-          <img className='w-100' src={product.product.imageCover} alt="" srcset="" />
+          <img className='w-100' src={product.product.imageCover} alt={product.product.title} />
         </div>
         <div className="col-md-11">
           <div className="d-flex justify-content-between align-items-center">
@@ -42,16 +42,12 @@ export default function Cart() {
               <h6 className='text-main'>Price: {product.price}EGP</h6>
             </div>
             <div className="">
-              <button onClick={()=>updateCount(product.product.id,product.count + 1 )} className= 'btn brdr-main p-1'>+</button>
+              <button onClick={() => updateCount(product.product.id, product.count + 1)} className='btn brdr-main p-1'>+</button>
               <span className='mx-2 '>{product.count}</span>
-              <button onClick={()=>updateCount(product.product.id,product.count - 1)} className='btn brdr-main p-1'>-</button>
+              <button onClick={() => updateCount(product.product.id, product.count - 1)} className='btn brdr-main p-1'>-</button>
             </div>
           </div>
           <button onClick={() => removeItem(product.product.id)} className='btn  p-0'> <i className="text-danger font-sm fas fa-trash-can"></i>Remove</button>
-       
-       
-       
-       
         </div>
       </div>))}
 
@@ -60,18 +56,16 @@ export default function Cart() {
 
     </div>
       : <section id='loading' className='d-flex justify-content-center align-items-center' >
-
         <BallTriangle
           height={100}
           width={100}
           radius={5}
           color="#4fa94d"
           ariaLabel="ball-triangle-loading"
-          wrapperClass={{}}
-          wrapperStyle=""
+          wrapperStyle={{}}
+          wrapperClass=""
           visible={true}
         />
-
       </section>}
   </>
 }

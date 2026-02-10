@@ -1,28 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import styles from './Navbar.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/images/freshcart-logo.svg'
 import { CartContext } from '../Context/CartContext.js';
 import { UserContext } from '../Context/UserContext.js';
 
 export default function Navbar() {
-  let { getLoggedUserCart, numOfCartItems } = useContext(CartContext);
+  let { getLoggedUserCart } = useContext(CartContext);
   const [cartCount, setCartCount] = useState(0)
-
-  async function getCart() {
-    let response = await getLoggedUserCart()
-    if (response?.data) {
-      setCartCount(response.data.numOfCartItems || 0);
-    }
-  }
 
   let { userToken, setUserToken } = useContext(UserContext);
 
   useEffect(() => {
+    async function getCart() {
+      let response = await getLoggedUserCart()
+      if (response?.data) {
+        setCartCount(response.data.numOfCartItems || 0);
+      }
+    }
     if (userToken) {
       getCart();
     }
-  }, [userToken])
+  }, [userToken, getLoggedUserCart])
 
   let navigate = useNavigate()
 
@@ -88,7 +86,6 @@ export default function Navbar() {
               <li className="nav-item">
                 <span onClick={() => logOut()} className="nav-link cursor-pointer" >Logout</span>
               </li>
-
             </> : <>
               <li className="nav-item">
                 <Link className="nav-link" to="/login">Login</Link>
@@ -98,9 +95,7 @@ export default function Navbar() {
               </li>
             </>}
 
-
           </ul>
-
         </div>
       </div>
     </nav>
