@@ -2,45 +2,37 @@ import React, { useContext, useEffect, useState } from 'react';
 // import styles from './Navbar.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../Assets/images/freshcart-logo.svg'
-import { CounterContext } from '../Context/CounterContext.js';
 import { CartContext } from '../Context/CartContext.js';
-
 import { UserContext } from '../Context/UserContext.js';
-import { useSelector } from 'react-redux';
 
-import Product from '../Cart/Cart.jsx'
 export default function Navbar() {
-   let {counter , userName} =  useSelector((state)=>state.counter)
-  // let { counter } = useContext(CounterContext);
-
-  let { getLoggedUserCart} = useContext(CartContext);
-  const [cartDetails, setCartDetails] = useState(null)
+  let { getLoggedUserCart, numOfCartItems } = useContext(CartContext);
+  const [cartCount, setCartCount] = useState(0)
 
   async function getCart() {
-    let { data } = await getLoggedUserCart()
-    setCartDetails(data);
-    console.log(data)
+    let response = await getLoggedUserCart()
+    if (response?.data) {
+      setCartCount(response.data.numOfCartItems || 0);
+    }
   }
-  useEffect(() => {
-    getCart();
-    console.log(getCart);
-  }, [])
-
-
-
 
   let { userToken, setUserToken } = useContext(UserContext);
 
+  useEffect(() => {
+    if (userToken) {
+      getCart();
+    }
+  }, [userToken])
 
   let navigate = useNavigate()
 
-  console.log(counter);
   function logOut() {
     localStorage.removeItem('userToken')
     setUserToken(null);
+    setCartCount(0);
     navigate('/login')
   }
-console.log(cartDetails);
+
   return <>
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -55,14 +47,13 @@ console.log(cartDetails);
             {userToken !== null ? <>
               <li className="nav-item">
                 <Link className="nav-link" to="/">Home </Link>
-                {/* {counter} */}
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/products">Products</Link>
               </li>
-              {/* <li className="nav-item">
+              <li className="nav-item">
                 <Link className="nav-link" to="/WishList">WishList</Link>
-              </li> */}
+              </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/categories">Categories</Link>
               </li>
@@ -75,7 +66,7 @@ console.log(cartDetails);
               <li className="nav-item">
                 <Link className="nav-link" to="/Profile">Profile</Link>
               </li>
-              </> : ''}
+            </> : ''}
 
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -85,8 +76,12 @@ console.log(cartDetails);
               <i className='fab mx-2 fa-instagram'></i>
               <i className='fab mx-2 fa-youtube'></i>
               <i className='fab mx-2 fa-tiktok'></i>
-              {cartDetails ?<i className="fas fa-solid fa-shopping-cart">{Product.count}</i>:<i className="fas fa-solid fa-shopping-cart">{Product.count}</i>
-              }
+              {userToken !== null ?
+                <Link to="/cart" className="nav-link position-relative mx-2">
+                  <i className="fas fa-shopping-cart"></i>
+                  {cartCount > 0 && <span className="badge bg-main position-absolute top-0 start-100 translate-middle rounded-pill">{cartCount}</span>}
+                </Link>
+                : null}
             </li>
 
             {userToken !== null ? <>

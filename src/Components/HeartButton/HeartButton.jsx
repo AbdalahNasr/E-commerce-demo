@@ -1,22 +1,15 @@
-// import React from 'react';
+import React from 'react';
 
-// const HeartButton = ({ isFavorite, onToggle, onAdd, onRemove }) => {
-//   return (
-//     <button onClick={isFavorite ? onRemove : onAdd}>
-//       {isFavorite ? '❤️' : '🤍'}
-//     </button>
-//   );
-// };
+const HeartButton = ({ isFavorite, onAdd, onRemove }) => {
+    return (
+        <button
+            onClick={isFavorite ? onRemove : onAdd}
+            className="btn p-0 border-0"
+            style={{ fontSize: '1.2rem', background: 'none', cursor: 'pointer' }}
+        >
+            {isFavorite ? <i className="fas fa-heart text-danger"></i> : <i className="far fa-heart"></i>}
+        </button>
+    );
+};
 
-// export default HeartButton;
-// import React from 'react';
-
-// const HeartButton = ({ isFavorite, onToggle, onAdd, onRemove, icon }) => {
-//   return (
-//     <button onClick={isFavorite ? onRemove : onAdd}>
-//       {icon}
-//     </button>
-//   );
-// };
-
-// export default HeartButton;
+export default HeartButton;
