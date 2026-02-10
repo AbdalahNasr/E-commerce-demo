@@ -50,8 +50,10 @@ async function getWishList() {
 let data = await  getLoggedUserWishList()
 
 // err when user logout
-setWishListId(data?.data._id)
-console.log(data?.data._id);
+if (data?.data && data.data._id) {
+  setWishListId(data.data._id)
+  console.log(data.data._id);
+}
 }
 useEffect(()=>{
 getWishList()

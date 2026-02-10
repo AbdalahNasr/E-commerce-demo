@@ -50,8 +50,10 @@ async function getCart() {
   let data = await  getLoggedUserCart()
 
   // err when user logout
-  setCartId(data?.data._id)
-  console.log(data?.data._id);
+  if (data?.data && data.data._id) {
+    setCartId(data.data._id)
+    console.log(data.data._id);
+  }
 }
 useEffect(()=>{
 getCart()
